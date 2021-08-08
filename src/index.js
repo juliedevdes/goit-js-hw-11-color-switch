@@ -6,34 +6,36 @@ const colors = [
   '#009688',
   '#795548',
 ];
-const randomIntegerFromInterval = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
 
 //refs
-
 const btnStart = document.querySelector('button[data-action="start"]');
 const btnStop = document.querySelector('button[data-action="stop"]');
 const body = document.querySelector('body');
 
-changeColor = function () {
+//need-to-use functions
+const randomIntegerFromInterval = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+const changeBodyColor = function () {
   body.style.backgroundColor = colors[randomIntegerFromInterval(0, 5)];
 };
 
-//click on start
+//init function
 const startBtnAction = function (e) {
-  const intervalID = setInterval(changeColor, 1000);
-  //console.log('click on start');
+  //start interval and remove event listener from start btn
+  const intervalID = setInterval(changeBodyColor, 1000);
   btnStart.removeEventListener('click', startBtnAction);
 
+  //start listen to stop btn ///
   const stopBtnAction = function (e) {
+    //...and if 'click' happened -> delete interval and listen to the start btn
     clearInterval(intervalID);
     btnStart.addEventListener('click', startBtnAction);
+    btnStop.removeEventListener('click', stopBtnAction);
   };
 
   btnStop.addEventListener('click', stopBtnAction);
 };
 
 btnStart.addEventListener('click', startBtnAction);
-
-//click on stop
